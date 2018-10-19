@@ -1,18 +1,61 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Places App</h1>
+  </div>
+  <div>
+    name: <input v-model="newPlace.name">
+    address: <input v-model="newPlace.address">
+    <button v-on:click="addPlace()">Add Place</button>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+<style>
+</style>
 
+<script>
+  var axios = require('axios');
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+  data: function() {
+    return {
+      places: [],
+      newPlace: {name: " ", address: " "}
+    };
+  },
+  created: function() {
+    var params = {
+                  name: this.newPlace.name,
+                  address: this.newPlace.address
+                  };
+
+
+    axios
+    .get("http://localhost:3000/api/places")
+    .then(response => {
+      this.places = response.data;
+    });
+
+
+
+  },
+  methods: {
+
+    addPlace: function() {
+      var params = {
+                    name: this.newPlace.name,
+                    address: this.newPlace.address
+                    };
+
+  axios
+  .post("http://localhost:3000/api/places", params)
+  .then(response => {
+    this.place.push(response.data);
+  });   
+
+  this.newPlace = {name: " ", address: " "};               
+
+    };
+
+  },
+  computed: {}
+};
 </script>
